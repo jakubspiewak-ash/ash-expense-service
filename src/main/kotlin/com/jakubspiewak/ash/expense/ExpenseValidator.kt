@@ -2,9 +2,7 @@ package com.jakubspiewak.ash.expense
 
 import com.jakubspiewak.ash.expense.http.*
 import com.jakubspiewak.ash.expense.model.*
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import java.time.LocalDate
 import java.util.*
 
 fun <K, V> Map<K, V>.deepEqualKeys(keys: Set<K>): Boolean {
@@ -70,7 +68,6 @@ class ExpenseValidator(private val repository: ExpenseRepository) {
         val errors: MutableList<HttpParameterError> = mutableListOf()
         val start = dateRange.start
         val end = dateRange.end
-        println(dateRange.end?.isAfter(dateRange.start ?: LocalDate.now()))
         if (end != null && start?.isAfter(end) == true) {
             errors += HttpParameterError("date.start", "Has to be after end date")
         }
@@ -141,7 +138,7 @@ class ExpenseValidator(private val repository: ExpenseRepository) {
     }
 
     private fun checkIfExists(id: UUID) {
-        repository.findByIdOrNull(id) ?: throw HttpNotFoundException(
+        if (!repository.existsById(id)) throw HttpNotFoundException(
             HttpNotFoundExceptionBody(
                 "Expense not found",
                 Date()

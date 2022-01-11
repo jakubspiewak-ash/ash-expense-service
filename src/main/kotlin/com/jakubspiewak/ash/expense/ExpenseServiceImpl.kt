@@ -3,7 +3,6 @@ package com.jakubspiewak.ash.expense
 import com.jakubspiewak.ash.expense.model.ExpenseCreateRequest
 import com.jakubspiewak.ash.expense.model.ExpenseGetResponse
 import org.springframework.context.annotation.Primary
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.time.YearMonth
 import java.util.*
@@ -21,7 +20,7 @@ class ExpenseServiceImpl(
     }
 
     override fun read(month: YearMonth?): List<ExpenseGetResponse> {
-        return repository.findAll().map { mapper.mapToResponse(it) }
+        return repository.readAll().map { mapper.mapToResponse(it) }
     }
 
     override fun update(id: UUID, request: ExpenseCreateRequest) {

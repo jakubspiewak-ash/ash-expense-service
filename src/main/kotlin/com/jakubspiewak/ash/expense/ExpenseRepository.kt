@@ -1,6 +1,9 @@
 package com.jakubspiewak.ash.expense
 
-import org.springframework.data.mongodb.repository.MongoRepository
-import java.util.*
+import com.jakubspiewak.ash.expense.mongo.MultiTenantMongoRepository
+import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.stereotype.Repository
 
-interface ExpenseRepository : MongoRepository<ExpenseDocument, UUID>
+@Repository
+class ExpenseRepository(mongoTemplate: MongoTemplate) :
+    MultiTenantMongoRepository<ExpenseDocument>(ExpenseDocument::class.java, mongoTemplate)

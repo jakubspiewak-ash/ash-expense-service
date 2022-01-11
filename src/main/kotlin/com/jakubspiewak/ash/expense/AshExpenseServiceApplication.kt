@@ -6,7 +6,8 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 @EnableMongoRepositories
 @SpringBootApplication
-class AshExpenseServiceApplication {
-    fun main(args: Array<String>) = runApplication<AshExpenseServiceApplication>(*args)
-}
+open class AshExpenseServiceApplication
 
+fun main(args: Array<String>) {
+    runApplication<AshExpenseServiceApplication>(*args)
+}
