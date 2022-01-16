@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.MongoDatabaseFactory
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter
+import org.springframework.data.mongodb.core.convert.MongoCustomConversions
 
 @Configuration
 open class MultiTenantMongoConfiguration : AbstractMongoClientConfiguration() {
@@ -24,14 +25,17 @@ open class MultiTenantMongoConfiguration : AbstractMongoClientConfiguration() {
     override fun mongoTemplate(
         databaseFactory: MongoDatabaseFactory,
         mappingMongoConverter: MappingMongoConverter
-    ): MongoTemplate {
-        return MultiTenantMongoTemplate(databaseFactory)
-    }
+    ): MongoTemplate = MultiTenantMongoTemplate(databaseFactory, mappingMongoConverter)
 
     override fun configureClientSettings(builder: MongoClientSettings.Builder) {
         builder
             .credential(MongoCredential.createCredential("root", "admin", "root".toCharArray()))
+            .codecRegistry(MongoClientSettings.getDefaultCodecRegistry())
             .uuidRepresentation(STANDARD)
             .applyToClusterSettings { it.hosts(listOf(ServerAddress("127.0.0.1", 27017))) }
+    }
+
+    override fun configureConverters(converter: MongoCustomConversions.MongoConverterConfigurationAdapter) {
+        converter.useNativeDriverJavaTimeCodecs()
     }
 }

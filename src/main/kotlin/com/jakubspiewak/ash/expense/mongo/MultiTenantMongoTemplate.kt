@@ -2,10 +2,13 @@ package com.jakubspiewak.ash.expense.mongo
 
 import org.springframework.data.mongodb.MongoDatabaseFactory
 import org.springframework.data.mongodb.core.MongoTemplate
-import org.springframework.stereotype.Component
+import org.springframework.data.mongodb.core.convert.MappingMongoConverter
 
-@Component
-open class MultiTenantMongoTemplate(mongoDbFactory: MongoDatabaseFactory) : MongoTemplate(mongoDbFactory) {
+open class MultiTenantMongoTemplate(
+    mongoDbFactory: MongoDatabaseFactory,
+    mongoConverter: MappingMongoConverter
+) : MongoTemplate(mongoDbFactory, mongoConverter) {
+
     override fun getCollectionName(entityClass: Class<*>): String {
         val collectionName = super.getCollectionName(entityClass)
         val userId = DatabaseContextHolder.getCurrentUserId()

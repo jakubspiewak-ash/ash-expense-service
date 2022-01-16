@@ -76,7 +76,7 @@ class ExpenseValidator(private val repository: ExpenseRepository) {
 
     private fun validateName(name: String): List<HttpParameterError> {
         return if (name.length !in 4..32) {
-            mutableListOf(
+            listOf(
                 HttpParameterError(
                     "name",
                     "Length should be in [6-32] range"
